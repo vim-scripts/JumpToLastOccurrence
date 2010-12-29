@@ -1,0 +1,104 @@
+*JumpToLastOccurrence.txt*  f{char} motions that count from the end of the line. 
+
+		  JUMP TO LAST OCCURRENCE    by Ingo Karkat
+						    *JumpToLastOccurrence.vim*
+description			|JumpToLastOccurrence-description|
+usage				|JumpToLastOccurrence-usage|
+installation			|JumpToLastOccurrence-installation|
+configuration			|JumpToLastOccurrence-configuration|
+limitations			|JumpToLastOccurrence-limitations|
+known problems			|JumpToLastOccurrence-known-problems|
+todo				|JumpToLastOccurrence-todo|
+history				|JumpToLastOccurrence-history|
+
+==============================================================================
+DESCRIPTION				    *JumpToLastOccurrence-description*
+
+The |f|{char}, |F|, |t| and |T| family of motions are often more effective
+than the more general |l|, |w| and |W| motions. However, there are situations
+where they are difficult to apply. 
+Take a long file system path like /var/opt/foo/a/very/long/path/to/filename.
+Imagine you are on the beginning / and want to change the entire directory
+path, but keep the filename. You'd either have to count occurrences (e.g. c8f/
+or c2tf), do multiple moves ($T/cB), use visual mode (veeeeeeeelc), or a
+search (c/filen<CR>). 
+
+This plugin extends the built-in f/F/t/T motions with counterparts that move
+to the last occurrence of {char} in the line. For the above example, that
+would be a short c,f/ to jump to the last slash in the line. 
+
+==============================================================================
+USAGE						  *JumpToLastOccurrence-usage*
+
+,f{char}		To [count]'th occurrence of {char}, counting from the
+			end of the line. The cursor is placed on {char}
+			|inclusive|.
+,F{char}		To the [count]'th occurrence of {char}, counting from
+			the beginning of the line. The cursor is placed on
+			{char} |exclusive|.
+,t{char}		Till before [count]'th occurrence of {char}, counting
+			from the end of the line. The cursor is placed on the
+			character left of {char} |inclusive|.
+,T{char}		Till after [count]'th occurrence of {char}, counting
+			from the beginning of the line. The cursor is placed
+			on the character right of {char} |exclusive|.
+
+			All motions can be repeated with |;| and |,|. However,
+			the ,t and ,T motions will jump to, not until, the
+			next {char}. 
+
+==============================================================================
+INSTALLATION				   *JumpToLastOccurrence-installation*
+
+This script is packaged as a |vimball|. If you have the "gunzip" decompressor
+in your PATH, simply edit the *.vba.gz package in Vim; otherwise, decompress
+the archive first, e.g. using WinZip. Inside Vim, install by sourcing the
+vimball or via the |:UseVimball| command. >
+    vim JumpToLastOccurrence.vba.gz
+    :so %
+To uninstall, use the |:RmVimball| command. 
+
+DEPENDENCIES				   *JumpToLastOccurrence-dependencies*
+
+- Requires Vim 7.0 or higher. 
+
+==============================================================================
+CONFIGURATION				  *JumpToLastOccurrence-configuration*
+
+==============================================================================
+LIMITATIONS				    *JumpToLastOccurrence-limitations*
+
+- The ,t and ,T motions will jump to, not until, the next {char}. There's no
+  built-in Vim motion for that reverse movement, and overloading ; and , would
+  be very complex and probably also necessitate overloading f/F/t/T. 
+- When there's no match, the operator-pending mappings aren't canceled. So,
+  cfX does not go into insert mode when there's no "X" match, but c,fX does. 
+- The operator-pending mode mappings don't work properly when the char at the
+  end of the buffer is matched; the final character will remain, and a beep is
+  issued. But one would probably use the much simpler $ motion in that case,
+  anyway. 
+
+KNOWN PROBLEMS				 *JumpToLastOccurrence-known-problems*
+
+TODO						   *JumpToLastOccurrence-todo*
+
+- Handle digraphs via <C-K>. 
+
+IDEAS						  *JumpToLastOccurrence-ideas*
+
+==============================================================================
+HISTORY						*JumpToLastOccurrence-history*
+
+1.00	29-Dec-2010
+First published version. 
+
+0.01	11-Dec-2010
+Started development. 
+
+==============================================================================
+Copyright: (C) 2010 Ingo Karkat
+The VIM LICENSE applies to this script; see |copyright|. 
+
+Maintainer:	Ingo Karkat <ingo@karkat.de>
+==============================================================================
+ vim:tw=78:ts=8:ft=help:norl:
