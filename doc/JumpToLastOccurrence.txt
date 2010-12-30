@@ -65,6 +65,28 @@ DEPENDENCIES				   *JumpToLastOccurrence-dependencies*
 ==============================================================================
 CONFIGURATION				  *JumpToLastOccurrence-configuration*
 
+For a permanent configuration, put the following commands into your |vimrc|: 
+
+					       *g:JumpToLastOccurrence_Leader*
+By default, all mappings start with |,| (comma) as the map leader instead of
+using <Leader>. I personally find the default <Leader> key too far off the
+keyboard to be useful for custom motions (which also cannot be repeated via
+the |.| (dot) command, so they should be very fast to type repeatedly), but
+quite suitable for general, less frequently used custom mappings. 
+To avoid losing the (rarely used) |,| mapping (which repeats latest f, t, F or
+T in opposite direction), you can remap it to ,,: >
+    nnoremap ,, ,
+    xnoremap ,, ,
+    onoremap ,, ,
+
+If you don't agree with this and want all motions to start with <Leader> (or
+any other key), you can do this (before sourcing this script): >
+    let g:JumpToLastOccurrence_Leader = '<Leader>'
+
+If you want to use completely different or only a few of the mappings, map
+your keys to the <Plug>JumpToLastOccurrence_? mapping targets _before_
+sourcing this script (e.g. in your |vimrc|). 
+
 ==============================================================================
 LIMITATIONS				    *JumpToLastOccurrence-limitations*
 
@@ -88,6 +110,11 @@ IDEAS						  *JumpToLastOccurrence-ideas*
 
 ==============================================================================
 HISTORY						*JumpToLastOccurrence-history*
+
+1.10	30-Dec-2010
+- Moved functions from plugin to separate autoload script. 
+- Made mappings configurable, both via the customary <Plug> mappings and
+  alternatively in bulk through the g:JumpToLastOccurrence_Leader setting. 
 
 1.00	29-Dec-2010
 First published version. 
