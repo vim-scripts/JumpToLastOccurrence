@@ -3,30 +3,30 @@ This is a mirror of http://www.vim.org/scripts/script.php?script_id=3386
 DESCRIPTION
 The f{char}, F, t and T family of motions are often more effective
 than the more general l, w and W motions. However, there are situations
-where they are difficult to apply. 
+where they are difficult to apply.
 Take a long file system path like /var/opt/foo/a/very/long/path/to/filename.
 Imagine you are on the beginning / and want to change the entire directory
 path, but keep the filename. You'd either have to count occurrences (e.g. c8f/
 or c2tf), do multiple moves ($T/cB), use visual mode (veeeeeeeelc), or a
-search (c/filen<CR>). 
+search (c/filen<CR>).
 
 This plugin extends the built-in f/F/t/T motions with counterparts that move
 to the last occurrence of {char} in the line. For the above example, that
-would be a short c,f/ to jump to the last slash in the line. 
+would be a short c,f/ to jump to the last slash in the line.
 
 USAGE
-,f{char}		To [count]'th occurrence of {char}, counting from the
-			end of the line. The cursor is placed on {char}. 
-,F{char}		To the [count]'th occurrence of {char}, counting from
-			the beginning of the line. The cursor is placed on
-			{char}. 
-,t{char}		Till before [count]'th occurrence of {char}, counting
-			from the end of the line. The cursor is placed on the
-			character left of {char}. 
-,T{char}		Till after [count]'th occurrence of {char}, counting
-			from the beginning of the line. The cursor is placed
-			on the character right of {char}. 
+,f{char}                To [count]'th occurrence of {char}, counting from the
+                        end of the line. The cursor is placed on {char}.
+,F{char}                To the [count]'th occurrence of {char}, counting from
+                        the beginning of the line. The cursor is placed on
+                        {char}.
+,t{char}                Till before [count]'th occurrence of {char}, counting
+                        from the end of the line. The cursor is placed on the
+                        character left of {char}.
+,T{char}                Till after [count]'th occurrence of {char}, counting
+                        from the beginning of the line. The cursor is placed
+                        on the character right of {char}.
 
-			All motions can be repeated with ; and ,. However,
-			the ,t and ,T motions will jump to, not until, the
-			next {char}. 
+                        All motions can be repeated with ; and ,. However,
+                        the ,t and ,T motions will jump to, not until, the
+                        next {char}.

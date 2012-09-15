@@ -44,7 +44,7 @@ function! s:CreateMotionMappings()
 	    \)
 	    if ! hasmapto(l:targetMapping, l:mode)
 		let l:mapping = g:JumpToLastOccurrence_Leader . l:motion
-		execute (l:mode ==# 'v' ? 'x' : l:mode) . 'map <silent> ' . l:mapping . ' ' . l:targetMapping 
+		execute (l:mode ==# 'v' ? 'x' : l:mode) . 'map <silent> ' . l:mapping . ' ' . l:targetMapping
 	    endif
 	endfor
     endfor
@@ -55,4 +55,4 @@ delfunction s:CreateMotionMappings
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
-" vim: set sts=4 sw=4 noexpandtab ff=unix fdm=syntax :
+" vim: set ts=8 sts=4 sw=4 noexpandtab ff=unix fdm=syntax :
