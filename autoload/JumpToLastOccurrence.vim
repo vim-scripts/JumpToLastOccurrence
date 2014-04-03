@@ -1,13 +1,35 @@
 " JumpToLastOccurrence.vim: f{char} motions that count from the end of the line.
 "
 " DEPENDENCIES:
+"   - ingo/motion/helper.vim autoload script
+"   - ingo/motion/omap.vim autoload script
+"   - ingo/query/get.vim autoload script
+"   - repeat.vim (vimscript #2136) autoload script (optional)
 "
-" Copyright: (C) 2010-2012 Ingo Karkat
+" Copyright: (C) 2010-2014 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"   1.20.006	15-Jan-2014	Use ingo#motion#omap#repeat().
+"   1.20.005	14-Jan-2014	ENH: Implement repeat of operator-pending
+"				mapping without re-querying the {char}. Since
+"				Vim 7.3.918, Vim will re-invoke the motion
+"				function, but that will still re-query. We need
+"				to use repeat.vim and pass it a special repeat
+"				mapping that re-uses the stored {char}. Special
+"				handling of the "c"hange operator is taken from
+"				https://github.com/tek/vim-argh/blob/master/autoload/argh.vim#L54.
+"				Factor out s:Jump() which additional takes the
+"				count and char from outside. Make
+"				JumpToLastOccurrence#Jump() take an optional
+"				repeatMapping argument, and invoke repeat.vim if
+"				supplied.
+"   1.12.004	11-Jan-2014	Factor out special treatment for visual and
+"				operator-pending motions to
+"				ingo#motion#helper#AdditionalMovement().
+"   1.12.003	02-Jan-2014	Use ingo#query#get#Char().
 "   1.11.002	15-Sep-2012	Also handle move to the buffer's very last
 "				character in operator-pending mode by
 "				temporarily setting 'virtualedit' to "onemore".
@@ -58,19 +80,19 @@ function! s:FindLastOccurrence( count, char, isBackward )
     endif
     return 1
 endfunction
-function! JumpToLastOccurrence#Jump( mode, isBefore, isBackward )
+function! JumpToLastOccurrence#Jump( mode, isBefore, isBackward, ... )
     let l:count = v:count1
 
-    let l:char = nr2char(getchar())
-    " TODO: Handle digraphs via <C-K>.
-    if l:char ==# "\<Esc>"
-	return
-    endif
+    let s:char = ingo#query#get#Char()
+    if empty(s:char) | return | endif
 
+    call call('s:Jump', [l:count, s:char, a:mode, a:isBefore, a:isBackward] + a:000)
+endfunction
+function! s:Jump( count, char, mode, isBefore, isBackward, ... )
     if a:mode ==# 'v'
 	normal! gv
     endif
-    if s:FindLastOccurrence(l:count, l:char, a:isBackward)
+    if s:FindLastOccurrence(a:count, a:char, a:isBackward)
 	if a:isBackward
 	    if a:isBefore
 		normal! l
@@ -82,32 +104,19 @@ function! JumpToLastOccurrence#Jump( mode, isBefore, isBackward )
 		endif
 	    else
 		if ! a:isBefore
-		    " In operator-pending mode, the 'l' motion only works properly
-		    " at the end of the line (i.e. when the moved-over "word" is at
-		    " the end of the line) when the 'l' motion is allowed to move
-		    " over to the next line. Thus, the 'l' motion is added
-		    " temporarily to the global 'whichwrap' setting. Without this,
-		    " the motion would leave out the last character in the line.
-		    let l:save_ww = &whichwrap
-		    set whichwrap+=l
-		    if line('.') == line('$') && &virtualedit !=# 'onemore' && &virtualedit !=# 'all'
-			" For the last line in the buffer, that still doesn't work,
-			" unless we can do virtual editing.
-			let l:save_ve = &virtualedit
-			set virtualedit=onemore
-			normal! l
-			augroup TempVirtualEdit
-			    execute 'autocmd! CursorMoved * set virtualedit=' . l:save_ve . ' | autocmd! TempVirtualEdit'
-			augroup END
-		    else
-			normal! l
-		    endif
-		    let &whichwrap = l:save_ww
+		    call ingo#motion#helper#AdditionalMovement()
 		endif
 	    endif
 	endif
+	if a:0 && a:mode ==# 'o'
+	    call ingo#motion#omap#repeat(a:1, v:operator, a:count)
+	endif
     endif
+
     " XXX: omap isn't canceled.
+endfunction
+function! JumpToLastOccurrence#Repeat( mode, isBefore, isBackward, repeatMapping )
+    call s:Jump(v:count1, s:char, a:mode, a:isBefore, a:isBackward, a:repeatMapping)
 endfunction
 
 " vim: set ts=8 sts=4 sw=4 noexpandtab ff=unix fdm=syntax :

@@ -27,6 +27,12 @@ This plugin extends the built-in f/F/t/T motions with counterparts that move
 to the last occurrence of {char} in the line. For the above example, that
 would be a short c,f/ to jump to the last slash in the line.
 
+SEE ALSO								     *
+
+- The |JumpToVerticalOccurrence.vim| plugin (vimscript #4841) implements
+  variations of |f| / |F| that move vertically across lines, restricted to the
+  same screen column as the cursor.
+
 ==============================================================================
 USAGE						  *JumpToLastOccurrence-usage*
 							   *,f* *,F* *,t* *,T*
@@ -61,6 +67,9 @@ To uninstall, use the |:RmVimball| command.
 DEPENDENCIES				   *JumpToLastOccurrence-dependencies*
 
 - Requires Vim 7.0 or higher.
+- Requires the |ingo-library.vim| plugin (vimscript #4433), version 1.016 or
+  higher.
+- repeat.vim (vimscript #2136) plugin, version 1.1 or higher (optional)
 
 ==============================================================================
 CONFIGURATION				  *JumpToLastOccurrence-configuration*
@@ -111,6 +120,12 @@ IDEAS						  *JumpToLastOccurrence-ideas*
 ==============================================================================
 HISTORY						*JumpToLastOccurrence-history*
 
+1.20	03-Apr-2014
+- ENH: Implement repeat of operator-pending mapping without re-querying the
+  {char}. This requires the repeat.vim plugin, version 1.1 or higher.
+- Add dependency to ingo-library (vimscript #4433). *** You need to separately
+  install ingo-library (vimscript #4433) version 1.016 (or higher)! ***
+
 1.11	15-Sep-2012
 Also handle move to the buffer's very last character in operator-pending mode.
 
@@ -126,8 +141,8 @@ First published version.
 Started development.
 
 ==============================================================================
-Copyright: (C) 2010 Ingo Karkat
-The VIM LICENSE applies to this script; see |copyright|.
+Copyright: (C) 2010-2014 Ingo Karkat
+The VIM LICENSE applies to this plugin; see |copyright|.
 
 Maintainer:	Ingo Karkat <ingo@karkat.de>
 ==============================================================================

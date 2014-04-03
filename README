@@ -14,18 +14,24 @@ This plugin extends the built-in f/F/t/T motions with counterparts that move
 to the last occurrence of {char} in the line. For the above example, that
 would be a short c,f/ to jump to the last slash in the line.
 
+SEE ALSO
+- The JumpToVerticalOccurrence.vim plugin (vimscript #4841) implements
+  variations of f / F that move vertically across lines, restricted to the
+  same screen column as the cursor.
+
 USAGE
 ,f{char}                To [count]'th occurrence of {char}, counting from the
-                        end of the line. The cursor is placed on {char}.
+                        end of the line. The cursor is placed on {char}
+                        inclusive.
 ,F{char}                To the [count]'th occurrence of {char}, counting from
                         the beginning of the line. The cursor is placed on
-                        {char}.
+                        {char} exclusive.
 ,t{char}                Till before [count]'th occurrence of {char}, counting
                         from the end of the line. The cursor is placed on the
-                        character left of {char}.
+                        character left of {char} inclusive.
 ,T{char}                Till after [count]'th occurrence of {char}, counting
                         from the beginning of the line. The cursor is placed
-                        on the character right of {char}.
+                        on the character right of {char} exclusive.
 
                         All motions can be repeated with ; and ,. However,
                         the ,t and ,T motions will jump to, not until, the
